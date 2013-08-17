@@ -28,7 +28,7 @@ var mainController = exports = module.exports = {
             logger.error("Error while indexing tweets: " + JSON.stringify(err));
           } else {
             logger.info("Successfully indexed tweets.");
-            logger.info("Tweets: " + JSON.stringify(res));
+            //logger.info("Tweets: " + JSON.stringify(res));
 
             elasticModel.search("justinbieber", function(err, results, res) {
               if(err) {

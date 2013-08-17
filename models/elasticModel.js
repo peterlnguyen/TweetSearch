@@ -1,4 +1,4 @@
-var elastical = require ("elastical");
+var elastical = require("elastical");
 var client = new elastical.Client();
 
 var elasticModel = exports = module.exports = {
@@ -17,11 +17,13 @@ var elasticModel = exports = module.exports = {
   _search: function(keywords, callback) {
     client.search(
       {
+        "index": "justinbieber",
         "query": {
           "match": {
-            "description": "fans",
-          }
+            "description": "fan"
+          },
         },
+        "fields": ["screen_name"],
         "size": 10
       },
       callback
