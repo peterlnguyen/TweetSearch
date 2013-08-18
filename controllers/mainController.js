@@ -4,6 +4,13 @@ var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
 
+// FIXME: delete this after?
+var searchkey = {
+  index: "justinbieber",
+  description: "fans",
+  fields: ["description", "screen_name"]
+};
+
 var mainController = exports = module.exports = {
 
   /* index tweets */
@@ -13,32 +20,21 @@ var mainController = exports = module.exports = {
     elasticModel.index_tweet_bulk(tweets, callback);
   },
 
+
   get_and_index_timeline: function(req, res) {
 
-    // GET request to twitter api
     twitterController.get_user_timeline("justinbieber", function(err, reply) {
-      if(err) {
-        logger.error("Error while sending GET request for tweets: " + JSON.stringify(err));
-      } else {
+      if(err) logger.error("Error while sending GET request for tweets: " + JSON.stringify(err));
+      else {
         logger.info("Succesfully reply from twitter api.");
-
-        // index tweets in elasticsearch
         mainController.index_tweet_bulk(reply, function(err, res) {
-          if(err) {
-            logger.error("Error while indexing tweets: " + JSON.stringify(err));
-          } else {
+          if(err) logger.error("Error while indexing tweets: " + JSON.stringify(err));
+          else {
             logger.info("Successfully indexed tweets.");
-            //logger.info("Tweets: " + JSON.stringify(res));
-
-            elasticModel.search("justinbieber", function(err, results, res) {
-              if(err) {
-                logger.error("Error while searching elasticsearch: " + err);
-                logger.info("Results: " + JSON.stringify(results));
-                logger.info("Res: " + JSON.stringify(res));
-              } else {
+            elasticModel.search(searchkey, function(err, results, res) {
+              if(err) logger.error("Error while searching elasticsearch: " + err);
+              else {
                 logger.info("Successfully queried elasticsearch.");
-
-                // display for user
                 logger.info("Results: " + JSON.stringify(results));
               }
             });

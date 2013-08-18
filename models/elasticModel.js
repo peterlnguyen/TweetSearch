@@ -17,13 +17,14 @@ var elasticModel = exports = module.exports = {
   _search: function(keywords, callback) {
     client.search(
       {
-        "index": "justinbieber",
         "query": {
           "match": {
-            "description": "fan"
+            "description": keywords.description 
           },
         },
-        "fields": ["screen_name"],
+        "index": keywords.index,
+        "type": "tweet",
+        "fields": keywords.fields,
         "size": 10
       },
       callback

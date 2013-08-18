@@ -1,0 +1,5 @@
+1. need to optimize deeply nested callback: http://andrewkelley.me/post/js-callback-organization.html
+2. think about decoupling the twitter extraction, indexing, and retrieving, because the only time those three actions are combined is when
+    the user searches for the screen name, which should be an edge case.
+3. possibly limit to the latest 200 tweets?  be sure to modularize to prepare for future extension.
+  - or fetch first 200 and the continue fetching in the background? or with a cron job?

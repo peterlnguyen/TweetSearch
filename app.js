@@ -34,7 +34,7 @@ app.get('/users', user.list);
 app.get('/index', routes.index);
 app.get('/get_tweets', index.get_user_timeline);
 
-app.get('/quicksearch', index.quicksearch);
+app.get('/search_tweets', index.search_tweets);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

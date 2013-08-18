@@ -17,11 +17,19 @@ var index = exports = module.exports = {
   },
 
   // FIXME: only for testing purposes, delete after.
-  quicksearch: function(req, res) {
-    elasticModel.search("justinbieber", function(err, res) {
-      logger.erorr("Err: " + JSON.stringify(err));
-      logger.info("Res: " + JSON.stringify(res));
-    });
+  search_tweets: function(req, res) {
+    elasticModel.search(
+      {
+        index: "justinbieber", 
+        description: "love", 
+        fields: ["description", "screen_name"]
+      }, 
+      function(err, res) {
+        logger.info("Err: " + JSON.stringify(err));
+        logger.info("Res: " + JSON.stringify(res));
+      }
+    );
+    res.render('index', { title: 'Express' });
   },
 
 };
