@@ -2,7 +2,6 @@ var rek = require("rekuire");
 var mainController = rek("mainController");
 var twitterController = rek("twitterController");
 var logger = rek("logger").get_log();
-var elasticModel = rek("elasticModel");
 
 var index = exports = module.exports = {
 
@@ -16,20 +15,8 @@ var index = exports = module.exports = {
     res.render('index', { title: 'Express' });
   },
 
-  // FIXME: only for testing purposes, delete after.
   search_tweets: function(req, res) {
-    elasticModel.search(
-      {
-        index: "justinbieber", 
-        description: "love", 
-        fields: ["description", "screen_name"]
-      }, 
-      function(err, res) {
-        logger.info("Err: " + JSON.stringify(err));
-        logger.info("Res: " + JSON.stringify(res));
-      }
-    );
-    res.render('index', { title: 'Express' });
+    mainController.search_tweets(req, res);
   },
 
 };
