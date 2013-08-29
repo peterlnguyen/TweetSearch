@@ -9,10 +9,8 @@ var index = exports = module.exports = {
     res.render('index', { title: 'Express' });
   },
 
-
   get_user_timeline: function(req, res) {
     mainController.get_and_index_timeline(req, res);
-    res.render('index', { title: 'Express' });
   },
 
   search_tweets: function(req, res) {

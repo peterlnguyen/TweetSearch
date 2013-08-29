@@ -13,48 +13,64 @@ var searchkey = {
 
 var mainController = exports = module.exports = {
 
-  /* index tweets */
+  /* twitter */
 
   index_tweet_bulk: function(tweets, callback) {
     logger.info("Attempting to index tweets into elasticsearch.");
     elasticModel.index_tweet_bulk(tweets, callback);
   },
 
+  /* elasticsearch */
+
+  // FIXME: redirect to correct views
   search_tweets: function(req, res) {
     logger.info("Attempting to search tweets.");
-    elasticModel.search(searchkey, function(err, res) {
-      if(err) logger.info("Err: " + JSON.stringify(err));
+
+    elasticModel.search(searchkey, function(error, result) {
+      if(error) logger.info("Err: " + JSON.stringify(error));
       else {
-        logger.info("Res: " + JSON.stringify(res));
+        logger.info("Res: " + JSON.stringify(result));
       }
-      res.render('Search Results', { title: 'Whatevz' });
+      res.render('index', { title: JSON.stringify(result) });
     });
   },
 
+  index_exists: function(index, callback) {
+    elasticModel.index_exists(index, callback);
+  },
+
+
+  // helper function
+  handle_error: function(error, result, callback) {
+    if(error) {
+      logger.error("Error in twitter.get_user_timeline: " + JSON.stringify(error));
+      callback(error, result);
+    }
+  },
+
+  // interface for view/routing method
+  get_and_index_timeline: function(req, res) {
+    mainController._get_and_index_timeline(req.params, function(error, result) {
+      logger.log("Total: " + result.total);
+      if(error) res.render('index', { title: 'Error' });
+      else res.render('index', { title: JSON.stringify(result) });
+    });
+  },
 
   // long and ugly function only usesd the first time someone enters in a screen name
-  get_and_index_timeline: function(keywords, callback) {
+  _get_and_index_timeline: function(keywords, callback) {
 
     twitterController.get_user_timeline("justinbieber", function(err, res) {
-      if(err) logger.error("Error while sending GET request for tweets: " + JSON.stringify(err));
-      else {
-        logger.info("Succesfully reply from twitter api.");
+      mainController.handle_error(err, res, callback);
 
-        mainController.index_tweet_bulk(res, function(err, res) {
-          if(err) logger.error("Error while indexing tweets: " + JSON.stringify(err));
-          else {
-            logger.info("Successfully indexed tweets.");
+      mainController.index_tweet_bulk(res, function(err, res) {
+        mainController.handle_error(err, res, callback);
 
-            elasticModel.search(searchkey, function(err, results, res) {
-              if(err) logger.error("Error while searching elasticsearch: " + err);
-              else {
-                logger.info("Successfully queried elasticsearch.");
-                logger.info("Results: " + JSON.stringify(results));
-              }
-            });
-          }
+        elasticModel.search(searchkey, function(err, result, res) {
+          mainController.handle_error(err, result, callback);
+          callback(err, result);
         });
-      }
+      });
     });
   },
 

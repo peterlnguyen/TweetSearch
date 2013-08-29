@@ -3,7 +3,27 @@ var client = new elastical.Client();
 
 var elasticModel = exports = module.exports = {
 
-  /* elastic search twitter */
+  /* elasticsearch maintenance functions */
+
+  index_exists: function(index, callback) {
+    client.indexExists(index, callback);
+  },
+
+  // FIXME: not done
+  create_index: function(name, options, callback) {
+    client.createIndex(name, options, callback);
+  },
+
+  delete_index: function(index, callback) {
+    // if no index is specified, deletes all indices
+    if(!index || index.length == 0) {
+      log.error("Index cannot be empty: " + index);
+      callback("{Error: 'Index cannot be empty}'", null);
+    }
+    else client.deleteIndex(index, callback);
+  },
+
+  /* elasticsearch action methods */
 
   index_tweet_bulk: function(tweets, callback) {
     wrapped_tweets = elasticModel.iterate_and_wrap_tweets(tweets);

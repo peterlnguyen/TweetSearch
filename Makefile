@@ -1,6 +1,7 @@
-make:
 
-make build:
+build:
 	node app
-make test:
-	mocha tests/unit/main.js
+test:
+	mocha tests/unit/elastic.js
+test_api:
+	mocha tests/functional/main.js
