@@ -4,3 +4,6 @@
 - description isn't being loaded, but was much earlier.  need to test processing area when tweets are retrieved, parsed, and indexed.
 - need to separate twitter API keys
 - need to test destroyDatabase function
+- test returns 0 for 0 for first get_and_index
+- replace "description" with "text"
+- only use one index with different types for each screen_name

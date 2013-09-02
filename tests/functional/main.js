@@ -12,7 +12,7 @@ describe("mainController", function() {
     it("should return at least one result", function(done) {
       this.timeout(5000);
 
-      main._get_and_index_timeline("crosscampusla", function(err, res) {
+      main._get_and_index_timeline("fmanjoo", function(err, res) {
         should.not.exist(err);
         res.total.should.be.above(0);
         done();

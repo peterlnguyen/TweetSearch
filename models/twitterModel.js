@@ -11,11 +11,12 @@ var twitClient  = new twit({
 
 var twitterModel = exports = module.exports = {
 
+  // FIXME: change count to 200
   get_user_timeline: function(screen_name, callback) {
     twitClient.get("statuses/user_timeline", 
     { 
       "screen_name": screen_name,
-      "count": 200,
+      "count": 1,
       "include_rts": 1,
     },
     callback);

@@ -101,7 +101,7 @@ var elasticModel = exports = module.exports = {
         "data": {
           "screen_name": tweet["user"]["screen_name"].toLowerCase(),
           "id": tweet["id"],
-          "description": tweet["description"],
+          "description": tweet["text"],
           "created_at": tweet["created_at"],
           "user_id": tweet["user"]["id"]
         }
