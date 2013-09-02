@@ -1,4 +1,5 @@
-var rek = require("rekuire"); var logger = rek("logger").get_log(); var twitterModel = rek("twitterModel");
+var rek = require("rekuire"); var logger = rek("logger").get_log(); 
+var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
 
@@ -19,8 +20,8 @@ var mainController = exports = module.exports = {
 
     var searchkey = {
       index: "justinbieber",
-      description: "fans",
-      fields: ["description", "screen_name"]
+      text: "fans",
+      fields: ["text", "screen_name"]
     };
 
     elasticModel.search(searchkey, function(error, result) {
@@ -61,8 +62,8 @@ var mainController = exports = module.exports = {
     // FIXME: get rid of this search key after figuring out get_index()
     var searchkey = {
       index: index_name,
-      description: "my fans",
-      fields: ["description", "screen_name"]
+      text: "my fans",
+      fields: ["text", "screen_name"]
     };
 
     elasticModel.index_exists(index_name, function(err, exists) {
