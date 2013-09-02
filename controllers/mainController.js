@@ -1,15 +1,6 @@
-var rek = require("rekuire");
-var logger = rek("logger").get_log();
-var twitterModel = rek("twitterModel");
+var rek = require("rekuire"); var logger = rek("logger").get_log(); var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
-
-// FIXME: temp, delete after
-var searchkey = {
-  index: "justinbieber",
-  description: "fans",
-  fields: ["description", "screen_name"]
-};
 
 var mainController = exports = module.exports = {
 
@@ -22,9 +13,15 @@ var mainController = exports = module.exports = {
 
   /* elasticsearch */
 
-  // FIXME: redirect to correct views
+  // FIXME: redirect to correct views and pass in correct search terms
   search_tweets: function(req, res) {
     logger.info("Attempting to search tweets.");
+
+    var searchkey = {
+      index: "justinbieber",
+      description: "fans",
+      fields: ["description", "screen_name"]
+    };
 
     elasticModel.search(searchkey, function(error, result) {
       if(error) logger.info("Err: " + JSON.stringify(error));
@@ -50,27 +47,51 @@ var mainController = exports = module.exports = {
 
   // interface for view/routing method
   get_and_index_timeline: function(req, res) {
-    mainController._get_and_index_timeline(req.params, function(error, result) {
+    mainController._get_and_index_timeline("justinbieber", function(error, result) {
       logger.log("Total: " + result.total);
       if(error) res.render('index', { title: 'Error' });
       else res.render('index', { title: JSON.stringify(result) });
     });
   },
 
-  // long and ugly function only usesd the first time someone enters in a screen name
-  _get_and_index_timeline: function(keywords, callback) {
+  // FIXME: structure searchkey so that it removems the description parameter
+  // long and ugly function only used the first time someone enters in a screen name
+  _get_and_index_timeline: function(index_name, callback) {
 
-    twitterController.get_user_timeline("justinbieber", function(err, res) {
-      mainController.handle_error(err, res, callback);
+    var searchkey = {
+      index: index_name,
+      description: "my fans",
+      fields: ["description", "screen_name"]
+    };
 
-      mainController.index_tweet_bulk(res, function(err, res) {
-        mainController.handle_error(err, res, callback);
+    elasticModel.index_exists(index_name, function(err, exists) {
+      mainController.handle_error(err, null, callback);
 
-        elasticModel.search(searchkey, function(err, result, res) {
+      // if new screen name, GET from twitter and index
+      if(!exists) {
+        twitterController.get_user_timeline(index_name, function(err, res) {
+          mainController.handle_error(err, res, callback);
+
+          mainController.index_tweet_bulk(res, function(err, res) {
+            mainController.handle_error(err, res, callback);
+
+            elasticModel.search(index_name, function(err, result, res) {
+              mainController.handle_error(err, result, callback);
+
+              callback(err, result);
+            });
+          });
+        });
+
+      // else fetch from elasticsearch
+      } else {
+        elasticModel.get_index(index_name, function(err, result, res) {
           mainController.handle_error(err, result, callback);
+
           callback(err, result);
         });
-      });
+      }
+
     });
   },
 

@@ -1,5 +1,6 @@
 var rek = require("rekuire");
 var twit = require("twit");
+var keys = rek("keys");
 
 var twitClient  = new twit({
   consumer_key: "ox3svi5a0uN7m99n23tw",

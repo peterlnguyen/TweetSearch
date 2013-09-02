@@ -1,5 +1,7 @@
+var rek = require("rekuire");
 var elastical = require("elastical");
 var client = new elastical.Client();
+var logger = rek("logger").get_log();
 
 var elasticModel = exports = module.exports = {
 
@@ -9,7 +11,8 @@ var elasticModel = exports = module.exports = {
     client.indexExists(index, callback);
   },
 
-  // FIXME: not done
+  // FIXME: need to figure out options logic
+  // basic index creation works with options set to {_type: "tweet"}
   create_index: function(name, options, callback) {
     client.createIndex(name, options, callback);
   },
@@ -17,8 +20,8 @@ var elasticModel = exports = module.exports = {
   delete_index: function(index, callback) {
     // if no index is specified, deletes all indices
     if(!index || index.length == 0) {
-      log.error("Index cannot be empty: " + index);
-      callback("{Error: 'Index cannot be empty}'", null);
+      //logger.error("Index cannot be empty: " + index);
+      callback({error: 'Index cannot be empty'}, null);
     }
     else client.deleteIndex(index, callback);
   },
@@ -45,6 +48,21 @@ var elasticModel = exports = module.exports = {
         "index": keywords.index,
         "type": "tweet",
         "fields": keywords.fields,
+        "size": 10
+      },
+      callback
+    );
+  },
+
+
+  get_index: function(index_name, callback) {
+    elasticModel.get_index(index_name, callback);
+  },
+  _get_index: function(index_name, callback) {
+    client.search(
+      {
+        "index": index_name,
+        "type": "tweet",
         "size": 10
       },
       callback
