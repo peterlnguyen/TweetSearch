@@ -3,6 +3,8 @@ var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
 
+var setup = false;
+
 var mainController = exports = module.exports = {
 
   /* twitter */
@@ -19,7 +21,7 @@ var mainController = exports = module.exports = {
     logger.info("Attempting to search tweets.");
 
     var searchkey = {
-      index: "justinbieber",
+      screen_name: "justinbieber",
       text: "fans",
       fields: ["text", "screen_name"]
     };
@@ -50,23 +52,27 @@ var mainController = exports = module.exports = {
     });
   },
 
-  // FIXME: structure searchkey so that it removems the description parameter
   // long and ugly function only used the first time someone enters in a screen name
-  _get_and_index_timeline: function(index_name, callback) {
+  _get_and_index_timeline: function(screen_name, callback) {
 
-    elasticModel.get_index(index_name, function(err, result, res) {
+    //// FIXME: need to detect if tweets actually exist
+    //if(!setup) {
+      //elasticModel.create_index("tweets", 
+    //}
+
+    elasticModel.get_user_tweets(screen_name, function(err, result, res) {
       mainController.handle_error(err, null, callback);
 
       // if new screen name, GET from twitter and index
       if(result.total == 0) {
-        twitterController.get_user_timeline(index_name, function(err, res) {
+        twitterController.get_user_timeline(screen_name, function(err, res) {
           mainController.handle_error(err, res, callback);
 
           mainController.index_tweet_bulk(res, function(err, res) {
             mainController.handle_error(err, res, callback);
 
             setTimeout(function() {
-              elasticModel.get_index(index_name, function(err, result, res) {
+              elasticModel.get_user_tweets(screen_name, function(err, result, res) {
                 mainController.handle_error(err, result, callback);
 
                 callback(err, result);

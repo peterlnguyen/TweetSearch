@@ -9,16 +9,34 @@ var main = rek("mainController");
 describe("mainController", function() {
 
   describe("get_and_index_timeline", function() {
-    it("should return at least one result", function(done) {
+    it("should retrieve a new timeline and search/confrm its existence", function(done) {
       this.timeout(5000);
 
-      main._get_and_index_timeline("davemcclure", function(err, res) {
+      var screen_name = "davemcclure";
+
+      main._get_and_index_timeline(screen_name, function(err, res) {
         should.not.exist(err);
         res.total.should.be.above(0);
-        done();
-      });
 
+        var params = {
+          type: screen_name,
+          fields: ["screen_name", "text"],
+          text: "the"
+        };
+
+        elasticModel.search(params, function(err, res) {
+          should.not.exist(err);
+          res.total.should.be.above(0);
+          done();
+          
+          // need to only destroy mattcutts type
+          //elasticModel.destroy_database(function(err, data) {
+            //should.not.exist(err);
+            //done();
+          //});
+        });
+
+      });
     })
   })
-
 });

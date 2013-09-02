@@ -37,7 +37,7 @@ describe("index interaction methods", function() {
 
   describe("index_create(), index_delete()", function() {
     it("should create a new index and delete it", function(done) {
-      elasticModel.create_index("fakeindex", {_type: "tweet"}, function(err, index, data) {
+      elasticModel.create_index("fakeindex", {_type: "nobody"}, function(err, index, data) {
         should.not.exist(err);
         (index).should.be.ok
 

@@ -3,8 +3,10 @@
 - still need to unit test index_bulk_tweet, especially since it's involved in a nested function.  on other hand, nested function is an edge case.
 - description isn't being loaded, but was much earlier.  need to test processing area when tweets are retrieved, parsed, and indexed.
 - need to separate twitter API keys
-- need to test destroyDatabase function
-- test returns 0 for 0 for first get_and_index
-- replace "description" with "text"
-- only use one index with different types for each screen_name
-- change index_name to screen_name or type_name for accuracy
+
+
+*** bottom two errors could be due to twitter api max limit
+- make clean destroys "tweet" index so that *nothing* exists, is especially apparent when you clean and then call get_and_index_timeline
+  - somehow create a setup file
+- need to only destroy mattcutts in test_api
+

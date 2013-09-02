@@ -46,8 +46,8 @@ var elasticModel = exports = module.exports = {
             "text": keywords.text 
           },
         },
-        "index": keywords.index,
-        "type": "tweet",
+        "index": "tweets",
+        "type": keywords.screen_name,
         "fields": keywords.fields,
         "size": 10
       },
@@ -56,17 +56,16 @@ var elasticModel = exports = module.exports = {
   },
 
 
-  // get index returns the initial, unfiltered list of a user's timeline
-  get_index: function(index_name, callback) {
-    elasticModel._get_index(index_name, callback);
+  // get_user_tweets returns the initial, unfiltered list of a user's timeline
+  get_user_tweets: function(screen_name, callback) {
+    elasticModel._get_user_tweets(screen_name, callback);
   },
 
-  // FIXME: fields should be removed after text fix
-  _get_index: function(index_name, callback) {
+  _get_user_tweets: function(screen_name, callback) {
     client.search(
       {
         "index": "tweets",
-        "type": index_name,
+        "type": screen_name,
         "fields": ["text", "screen_name"],
         "size": 10,
       },

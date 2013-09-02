@@ -5,12 +5,16 @@ var logger = rek("logger").get_log();
 var elasticModel = rek("elasticModel");
 
 describe("destroyDatabase()", function() {
-  it("should return at least one result", function(done) {
+  it("should destroy and create a clean index", function(done) {
 
     elasticModel.destroyDatabase(function(err, data) {
       should.not.exist(err);
-      logger.log("data: " + JSON.stringify(data));
-      done();
+
+      elasticModel.create_index("tweets", null, function(err, index, data) {
+        should.not.exist(err);
+        (index).should.be.ok;
+        done();
+      });
     });
 
   })
