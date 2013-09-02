@@ -58,6 +58,7 @@ var mainController = exports = module.exports = {
   // long and ugly function only used the first time someone enters in a screen name
   _get_and_index_timeline: function(index_name, callback) {
 
+    // FIXME: get rid of this search key after figuring out get_index()
     var searchkey = {
       index: index_name,
       description: "my fans",
@@ -87,7 +88,7 @@ var mainController = exports = module.exports = {
       } else {
         elasticModel.get_index(index_name, function(err, result, res) {
           mainController.handle_error(err, result, callback);
-
+          logger.info("result: " + JSON.stringify(result));
           callback(err, result);
         });
       }

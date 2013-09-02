@@ -33,6 +33,7 @@ var elasticModel = exports = module.exports = {
     client.bulk(wrapped_tweets, callback);
   },
 
+  // search by matching keywords found within tweet contents
   search: function(keywords, callback) {
     elasticModel._search(keywords, callback);
   },
@@ -55,15 +56,17 @@ var elasticModel = exports = module.exports = {
   },
 
 
+  // get index returns the initial, unfiltered list of a user's timeline
   get_index: function(index_name, callback) {
-    elasticModel.get_index(index_name, callback);
+    elasticModel._get_index(index_name, callback);
   },
+
   _get_index: function(index_name, callback) {
     client.search(
       {
-        "index": index_name,
-        "type": "tweet",
-        "size": 10
+        index: index_name,
+        type: "tweet",
+        size: 10,
       },
       callback
     );
