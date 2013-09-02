@@ -11,8 +11,8 @@ describe("Parsing and filtering json tweets to index", function() {
       var wrapped_tweet = elasticModel.wrap_tweet(tweet_ex)["index"];
       var wrapped_tweet_data = wrapped_tweet["data"];
 
-      assert.equal(wrapped_tweet["index"], "lukeskywalker");
-      assert.equal(wrapped_tweet["type"], "tweet");
+      assert.equal(wrapped_tweet["index"], "tweets");
+      assert.equal(wrapped_tweet["type"], "lukeskywalker");
       assert.equal(wrapped_tweet_data["id"], 1234567890);
       assert.equal(wrapped_tweet_data["text"], "hello world!");
       assert.equal(wrapped_tweet_data["created_at"], "Tue Aug 06 21:54:22 +0000 2013");
@@ -23,15 +23,8 @@ describe("Parsing and filtering json tweets to index", function() {
 
 
 describe("index interaction methods", function() {
-  describe("index_exists()", function() {
-    it("should return true for justinbieber", function(done) {
-      elasticModel.index_exists("justinbieber", function(err, exists) {
-        should.not.exist(err);
-        (exists).should.be.true;
-        done();
-      });
-    })
 
+  describe("index_exists()", function() {
     it("should return false for non-existent index", function(done) {
       var rand = Math.random();
       elasticModel.index_exists("gibberish" + rand, function(err, exists) {

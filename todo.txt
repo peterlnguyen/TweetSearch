@@ -7,3 +7,4 @@
 - test returns 0 for 0 for first get_and_index
 - replace "description" with "text"
 - only use one index with different types for each screen_name
+- change index_name to screen_name or type_name for accuracy

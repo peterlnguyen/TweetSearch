@@ -33,11 +33,6 @@ var mainController = exports = module.exports = {
     });
   },
 
-  index_exists: function(index, callback) {
-    elasticModel.index_exists(index, callback);
-  },
-
-
   // helper function
   handle_error: function(error, result, callback) {
     if(error) {
@@ -59,18 +54,11 @@ var mainController = exports = module.exports = {
   // long and ugly function only used the first time someone enters in a screen name
   _get_and_index_timeline: function(index_name, callback) {
 
-    // FIXME: get rid of this search key after figuring out get_index()
-    var searchkey = {
-      index: index_name,
-      text: "my fans",
-      fields: ["text", "screen_name"]
-    };
-
-    elasticModel.index_exists(index_name, function(err, exists) {
+    elasticModel.get_index(index_name, function(err, result, res) {
       mainController.handle_error(err, null, callback);
 
       // if new screen name, GET from twitter and index
-      if(!exists) {
+      if(result.total == 0) {
         twitterController.get_user_timeline(index_name, function(err, res) {
           mainController.handle_error(err, res, callback);
 
@@ -90,11 +78,7 @@ var mainController = exports = module.exports = {
 
       // else fetch from elasticsearch
       } else {
-        elasticModel.get_index(index_name, function(err, result, res) {
-          mainController.handle_error(err, result, callback);
-          logger.info("result: " + JSON.stringify(result));
-          callback(err, result);
-        });
+        callback(err, result);
       }
 
     });

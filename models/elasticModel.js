@@ -65,13 +65,8 @@ var elasticModel = exports = module.exports = {
   _get_index: function(index_name, callback) {
     client.search(
       {
-        "query": {
-          "match": {
-            "screen_name": index_name
-          },
-        },
-        "index": index_name,
-        "type": "tweet",
+        "index": "tweets",
+        "type": index_name,
         "fields": ["text", "screen_name"],
         "size": 10,
       },
@@ -96,8 +91,8 @@ var elasticModel = exports = module.exports = {
     logger.log("tweet: " + tweet);
     var tweet_elastic = {
       "index": {
-        "index": tweet["user"]["screen_name"].toLowerCase(),
-        "type": "tweet",
+        "index": "tweets",
+        "type": tweet["user"]["screen_name"].toLowerCase(),
         "data": {
           "screen_name": tweet["user"]["screen_name"].toLowerCase(),
           "id": tweet["id"],
