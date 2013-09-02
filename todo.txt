@@ -1,3 +1,6 @@
 - possibly limit to the latest 200 tweets?  be sure to modularize to prepare for future extension.
   - or fetch first 200 and the continue fetching in the background? or with a cron job?
 - still need to unit test index_bulk_tweet, especially since it's involved in a nested function.  on other hand, nested function is an edge case.
+- description isn't being loaded, but was much earlier.  need to test processing area when tweets are retrieved, parsed, and indexed.
+- need to separate twitter API keys
+- need to test destroyDatabase function

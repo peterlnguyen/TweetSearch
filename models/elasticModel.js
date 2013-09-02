@@ -61,6 +61,7 @@ var elasticModel = exports = module.exports = {
     elasticModel._get_index(index_name, callback);
   },
 
+  // FIXME: fields should be removed after description fix
   _get_index: function(index_name, callback) {
     client.search(
       {
@@ -71,6 +72,7 @@ var elasticModel = exports = module.exports = {
         },
         "index": index_name,
         "type": "tweet",
+        "fields": ["description", "screen_name"],
         "size": 10,
       },
       callback
@@ -89,7 +91,9 @@ var elasticModel = exports = module.exports = {
     return wrapped_tweets;
   },
 
+  // FIXME: delete logger
   wrap_tweet: function(tweet) {
+    logger.log("tweet: " + tweet);
     var tweet_elastic = {
       "index": {
         "index": tweet["user"]["screen_name"].toLowerCase(),
