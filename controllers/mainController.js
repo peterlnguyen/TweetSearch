@@ -76,7 +76,7 @@ var mainController = exports = module.exports = {
           mainController.index_tweet_bulk(res, function(err, res) {
             mainController.handle_error(err, res, callback);
 
-            elasticModel.search(index_name, function(err, result, res) {
+            elasticModel.get_index(index_name, function(err, result, res) {
               mainController.handle_error(err, result, callback);
 
               callback(err, result);

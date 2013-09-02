@@ -64,9 +64,14 @@ var elasticModel = exports = module.exports = {
   _get_index: function(index_name, callback) {
     client.search(
       {
-        index: index_name,
-        type: "tweet",
-        size: 10,
+        "query": {
+          "match": {
+            "screen_name": index_name
+          },
+        },
+        "index": index_name,
+        "type": "tweet",
+        "size": 10,
       },
       callback
     );
@@ -90,6 +95,7 @@ var elasticModel = exports = module.exports = {
         "index": tweet["user"]["screen_name"].toLowerCase(),
         "type": "tweet",
         "data": {
+          "screen_name": tweet["user"]["screen_name"].toLowerCase(),
           "id": tweet["id"],
           "description": tweet["description"],
           "created_at": tweet["created_at"],
@@ -98,6 +104,12 @@ var elasticModel = exports = module.exports = {
       }
     };
     return tweet_elastic;
+  },
+
+  /* deletes all indices */
+
+  destroyDatabase: function(callback) {
+    client.deleteIndex(null, callback);
   },
 
 };

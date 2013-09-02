@@ -12,13 +12,7 @@ describe("mainController", function() {
     it("should return at least one result", function(done) {
       this.timeout(5000);
 
-      var searchKey = {
-        index: "justinbieber",
-        description: "fans",
-        fields: ["description", "screen_name"]
-      };
-
-      main._get_and_index_timeline("justinbieber", function(err, res) {
+      main._get_and_index_timeline("stephenathome", function(err, res) {
         should.not.exist(err);
         res.total.should.be.above(0);
         done();
