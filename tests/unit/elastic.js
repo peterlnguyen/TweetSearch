@@ -3,12 +3,13 @@ var should = require("should");
 var rek = require("rekuire");
 var logger = rek("logger").get_log();
 var elasticModel = rek("elasticModel");
+var elasticHelper = rek("elasticHelper");
 
 describe("Parsing and filtering json tweets to index", function() {
   describe("wrap_tweet()", function() {
     it("should return a json object with correct fields", function() {
       var tweet_ex = { "created_at": "Tue Aug 06 21:54:22 +0000 2013", "id":1234567890, "text":"hello world!", "user":{"id":18002255288,"screen_name":"lukeskywalker"}}
-      var wrapped_tweet = elasticModel.wrap_tweet(tweet_ex)["index"];
+      var wrapped_tweet = elasticHelper.wrap_tweet(tweet_ex)["index"];
       var wrapped_tweet_data = wrapped_tweet["data"];
 
       assert.equal(wrapped_tweet["index"], "tweets");

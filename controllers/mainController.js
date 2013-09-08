@@ -3,6 +3,7 @@ var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
 
+// FIXME: used for deletion of indices
 var setup = false;
 
 var mainController = exports = module.exports = {
@@ -21,8 +22,8 @@ var mainController = exports = module.exports = {
     logger.info("Attempting to search tweets.");
 
     var searchkey = {
-      screen_name: "justinbieber",
-      text: "fans",
+      screen_name: "davemcclure",
+      text: "Said",
       fields: ["text", "screen_name"]
     };
 
@@ -45,7 +46,7 @@ var mainController = exports = module.exports = {
 
   // interface for view/routing method
   get_and_index_timeline: function(req, res) {
-    mainController._get_and_index_timeline("justinbieber", function(error, result) {
+    mainController._get_and_index_timeline("davemcclure", function(error, result) {
       logger.log("Total: " + result.total);
       if(error) res.render('index', { title: 'Error' });
       else res.render('index', { title: JSON.stringify(result) });
@@ -71,6 +72,7 @@ var mainController = exports = module.exports = {
           mainController.index_tweet_bulk(res, function(err, res) {
             mainController.handle_error(err, res, callback);
 
+            // give elasticsearch time to store events
             setTimeout(function() {
               elasticModel.get_user_tweets(screen_name, function(err, result, res) {
                 mainController.handle_error(err, result, callback);

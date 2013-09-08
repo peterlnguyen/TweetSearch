@@ -7,7 +7,7 @@ var elasticModel = rek("elasticModel");
 describe("destroyDatabase()", function() {
   it("should destroy and create a clean index", function(done) {
 
-    elasticModel.destroyDatabase(function(err, data) {
+    elasticModel.destroy_database(function(err, data) {
       should.not.exist(err);
 
       elasticModel.create_index("tweets", null, function(err, index, data) {
