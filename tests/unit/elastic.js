@@ -64,6 +64,7 @@ describe("index interaction methods", function() {
     })
   })
 
+  // FIXME: should be checking that indices still exist
   describe("index_delete() with no index specified", function() {
     it("should throw an error about specification", function(done) {
       elasticModel.delete_index(null, function(err, data) {
