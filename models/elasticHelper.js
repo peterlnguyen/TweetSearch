@@ -15,9 +15,7 @@ var elasticHelper = exports = module.exports = {
     return wrapped_tweets;
   },
 
-  // FIXME: delete logger
   wrap_tweet: function(tweet) {
-    logger.log("tweet: " + tweet);
     var tweet_elastic = {
       "index": {
         "index": "tweets",
@@ -32,6 +30,13 @@ var elasticHelper = exports = module.exports = {
       }
     };
     return tweet_elastic;
+  },
+
+  //converts the stupid created_at stamp twitter uses
+  get_unix_timestamp: function(created_at) {
+    date = moment.parse(created_at);
+    timestamp = moment.unix(date);
+    return timestamp; 
   },
 
 };

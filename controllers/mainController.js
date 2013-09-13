@@ -53,7 +53,7 @@ var mainController = exports = module.exports = {
     });
   },
 
-  // long and ugly function only used the first time someone enters in a screen name
+  // long and ugly function only used when someone searches for a new screen_name
   _get_and_index_timeline: function(screen_name, callback) {
 
     //// FIXME: need to detect if tweets actually exist
@@ -64,7 +64,7 @@ var mainController = exports = module.exports = {
     elasticModel.get_user_tweets(screen_name, function(err, result, res) {
       mainController.handle_error(err, null, callback);
 
-      // if new screen name, GET from twitter and index
+      // if new screen_name, GET from twitter and index
       if(result.total == 0) {
         twitterController.get_user_timeline(screen_name, function(err, res) {
           mainController.handle_error(err, res, callback);

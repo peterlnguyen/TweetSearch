@@ -68,7 +68,7 @@ describe("index interaction methods", function() {
   describe("index_delete() with no index specified", function() {
     it("should throw an error about specification", function(done) {
       elasticModel.delete_index(null, function(err, data) {
-        err.error.should.be.ok;
+        should.exist(err);
         should.not.exist(data);
         done();
       });
