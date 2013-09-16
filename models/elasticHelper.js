@@ -16,12 +16,13 @@ var elasticHelper = exports = module.exports = {
   },
 
   wrap_tweet: function(tweet) {
+    var screen_name = tweet["user"]["screen_name"].toLowerCase();
     var tweet_elastic = {
       "index": {
         "index": "tweets",
-        "type": tweet["user"]["screen_name"].toLowerCase(),
+        "type": screen_name,
         "data": {
-          "screen_name": tweet["user"]["screen_name"].toLowerCase(),
+          "screen_name": screen_name,
           "id": tweet["id"],
           "text": tweet["text"],
           "created_at": tweet["created_at"],

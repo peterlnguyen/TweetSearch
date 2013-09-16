@@ -18,64 +18,64 @@ describe("index interaction methods", function() {
   describe("index_tweet_bulk()", function() {
     this.timeout(50000);
 
-    describe("index test tweets", function() {
-    //it("should exist after bulk exist", function(done) {
+    it("should not encounter errors after bulk inserts", function(done) {
 
-      it("should exist after bulk exist", function(done) {
+      elasticModel.index_tweet_bulk(tweet_ex, function(err, res) {
+        should.not.exist(err);
+        res.should.be.ok;
 
-        elasticModel.index_tweet_bulk(tweet_ex, function(err, res) {
-          logger.info("err blah: " + JSON.stringify(err));
-          logger.info("res blah: " + JSON.stringify(res));
+        var params_lukeskywalker = {
+          screen_name: "lukeskywalker",
+          text: rand_lukeskywalker,
+          fields: ["text", "screen_name"]
+        };
 
-          should.not.exist(err);
-          res.should.be.ok;
-          //done();
+        var params_lukewalton = {
+          screen_name: "lukewalton",
+          text: rand_lukewalton,
+          fields: ["text", "screen_name"]
+        };
 
-          //it("should return return a result of at least 1", function(done) {
-            var params_lukeskywalker = {
-              screen_name: "lukeskywalker",
-              text: rand_lukeskywalker,
-              fields: ["text", "screen_name"]
-            };
+        var params_prince = {
+          screen_name: "prince",
+          text: rand_prince,
+          fields: ["text", "screen_name"]
+        };
 
-          var params_lukewalton = {
-            screen_name: "lukewalton",
-            text: rand_lukewalton,
-            fields: ["text", "screen_name"]
-          };
+        // searches have to be nested this way because mocha screws up multiple (non-nested) async callbacks + timeouts
+        setTimeout(function() {
+            describe("checks each search result against exactly one name and random number match", function() {
 
-          var params_prince = {
-            screen_name: "prince",
-            text: rand_prince,
-            fields: ["text", "screen_name"]
-          };
-
-          // searches have to be nested this way because mocha screws up multiple (non-nested) async callbacks + timeouts
-          setTimeout(function() {
               elasticModel.search(params_lukeskywalker, function(err, res) {
-                logger.info("err foo: " + JSON.stringify(err));
-                logger.info("res foo: " + JSON.stringify(res));
-                res.total.should.be.above(0);
+                res.total.should.be.equal(1);
+
+                var response = res.hits[0].fields;
+                assert.equal(response.screen_name, params_lukeskywalker.screen_name);
+                assert.equal(response.text, params_lukeskywalker.text); 
 
                 elasticModel.search(params_lukewalton, function(err, res) {
-                  logger.info("err dude: " + JSON.stringify(err));
-                  logger.info("res dude: " + JSON.stringify(res));
-                  res.total.should.be.above(0);
+                  res.total.should.be.equal(1);
+
+                  var response = res.hits[0].fields;
+                  assert.equal(response.screen_name, params_lukewalton.screen_name);
+                  assert.equal(response.text, params_lukewalton.text); 
 
                   elasticModel.search(params_prince, function(err, res) {
-                    logger.info("err prince: " + JSON.stringify(err));
-                    logger.info("res prince: " + JSON.stringify(res));
-                    res.total.should.be.above(0);
+                    res.total.should.be.equal(1);
+
+                    var response = res.hits[0].fields;
+                    assert.equal(response.screen_name, params_prince.screen_name);
+                    assert.equal(response.text, params_prince.text); 
+
                     done();
                   });
                 });
               });
-          }, 1500);
 
-        });
+            });
+        }, 1500);
 
       });
-
     });
 
   });

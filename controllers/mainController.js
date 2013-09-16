@@ -64,7 +64,7 @@ var mainController = exports = module.exports = {
     elasticModel.get_user_tweets(screen_name, function(err, result, res) {
       mainController.handle_error(err, null, callback);
 
-      // if new screen_name, GET from twitter and index
+      // if new screen_name, GET tweet timeline from twitter and index to elasticsearch
       if(result.total == 0) {
         twitterController.get_user_timeline(screen_name, function(err, res) {
           mainController.handle_error(err, res, callback);
