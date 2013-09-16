@@ -4,17 +4,19 @@ var rek = require("rekuire");
 var logger = rek("logger").get_log();
 var elasticModel = rek("elasticModel");
 
-describe("destroyDatabase()", function() {
-  it("should destroy and create a clean index", function(done) {
+describe("destroy_database()", function() {
+  it("should destroy the tweets index", function(done) {
 
     elasticModel.destroy_database(function(err, data) {
       should.not.exist(err);
 
-      elasticModel.create_index("tweets", null, function(err, index, data) {
+      elasticModel.index_exists("tweets", function(err, exists) {
         should.not.exist(err);
-        (index).should.be.ok;
+        (exists).should.be.false;
+
         done();
       });
+
     });
 
   })

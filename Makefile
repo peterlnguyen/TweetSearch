@@ -7,3 +7,5 @@ test_api:
 	mocha tests/functional/main.js
 clean:
 	mocha tests/maintenance/destroyDB.js
+setup:
+	mocha tests/maintenance/setupDB.js
