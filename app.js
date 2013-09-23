@@ -32,7 +32,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 app.get('/index', routes.index);
-app.get('/get_tweets', index.get_user_timeline);
+app.post('/get_tweets', index.get_user_timeline);
 
 app.get('/search_tweets', index.search_tweets);
 

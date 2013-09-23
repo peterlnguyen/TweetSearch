@@ -9,3 +9,5 @@ clean:
 	mocha tests/maintenance/destroyDB.js
 setup:
 	mocha tests/maintenance/setupDB.js
+everything:
+	make clean && make setup && make test && make test_api && make build

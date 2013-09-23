@@ -25,7 +25,7 @@ var mainController = exports = module.exports = {
     };
 
     elasticModel.search(searchkey, function(error, result) {
-      if(error) logger.info("Err: " + JSON.stringify(error));
+      if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));
       else {
         logger.info("Res: " + JSON.stringify(result));
       }
@@ -35,7 +35,7 @@ var mainController = exports = module.exports = {
 
   // helper function
   handle_error: function(error, result, callback) {
-    if(error) {
+    if(error && error != "{}") {
       logger.error("Error in twitter.get_user_timeline: " + JSON.stringify(error));
       callback(error, result);
     }
@@ -44,10 +44,11 @@ var mainController = exports = module.exports = {
   // FIXME: hardcoded only for testing purposes
   // interface for view/routing method
   get_and_index_timeline: function(req, res) {
-    mainController._get_and_index_timeline("davemcclure", function(error, result) {
-      logger.log("Total: " + result.total);
-      if(error) res.render('index', { title: 'Error' });
-      else res.render('index', { title: JSON.stringify(result) });
+    var screen_name = req.body.screen_name
+    mainController._get_and_index_timeline(screen_name, function(error, result) {
+      //if(error && error != "{}") res.render('index', { title: 'Error' });
+      //else res.render('index', { title: JSON.stringify(result) });
+      res.render('index', { title: JSON.stringify(result) });
     });
   },
 
@@ -55,20 +56,20 @@ var mainController = exports = module.exports = {
   _get_and_index_timeline: function(screen_name, callback) {
 
     elasticModel.get_user_tweets(screen_name, function(err, result, res) {
-      mainController.handle_error(err, null, callback);
+      //mainController.handle_error(err, null, callback);
 
       // if new screen_name, GET tweet timeline from twitter and index to elasticsearch
       if(result.total == 0) {
         twitterController.get_user_timeline(screen_name, function(err, res) {
-          mainController.handle_error(err, res, callback);
+          //mainController.handle_error(err, res, callback);
 
           mainController.index_tweet_bulk(res, function(err, res) {
-            mainController.handle_error(err, res, callback);
+            //mainController.handle_error(err, res, callback);
 
             // give elasticsearch time to store events
             setTimeout(function() {
               elasticModel.get_user_tweets(screen_name, function(err, result, res) {
-                mainController.handle_error(err, result, callback);
+                //mainController.handle_error(err, result, callback);
 
                 callback(err, result);
               });

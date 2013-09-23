@@ -16,10 +16,11 @@ describe("mainController", function() {
 
       main._get_and_index_timeline(screen_name, function(err, res) {
         should.not.exist(err);
+        console.log("res total: " + JSON.stringify(res));
         res.total.should.be.above(0);
 
         var params = {
-          type: screen_name,
+          screen_name: screen_name,
           fields: ["screen_name", "text"],
           text: "the"
         };
