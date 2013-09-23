@@ -12,8 +12,8 @@ var elasticModel = exports = module.exports = {
     client.indexExists(index, callback);
   },
 
-  // FIXME: need to figure out options logic
   // basic index creation works with options set to {_type: "tweet"}
+  // currently not using options
   create_index: function(name, options, callback) {
     client.createIndex(name, options, callback);
   },
@@ -21,7 +21,6 @@ var elasticModel = exports = module.exports = {
   delete_index: function(index, callback) {
     // if no index is specified, deletes all indices
     if(!index || index.length == 0) {
-      //logger.error("Index cannot be empty: " + index);
       callback({error: 'Index cannot be empty'}, null);
     }
     else client.deleteIndex(index, callback);
@@ -74,7 +73,7 @@ var elasticModel = exports = module.exports = {
     );
   },
 
-  /* deletes all indices */
+  /* deletes all indices (when called with empty parameter) */
 
   destroy_database: function(callback) {
     client.deleteIndex(null, callback);

@@ -3,9 +3,6 @@ var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
 
-// FIXME: used for deletion of indices
-var setup = false;
-
 var mainController = exports = module.exports = {
 
   /* twitter */
@@ -44,6 +41,7 @@ var mainController = exports = module.exports = {
     }
   },
 
+  // FIXME: hardcoded only for testing purposes
   // interface for view/routing method
   get_and_index_timeline: function(req, res) {
     mainController._get_and_index_timeline("davemcclure", function(error, result) {
@@ -55,11 +53,6 @@ var mainController = exports = module.exports = {
 
   // long and ugly function only used when someone searches for a new screen_name
   _get_and_index_timeline: function(screen_name, callback) {
-
-    //// FIXME: need to detect if tweets actually exist
-    //if(!setup) {
-      //elasticModel.create_index("tweets", 
-    //}
 
     elasticModel.get_user_tweets(screen_name, function(err, result, res) {
       mainController.handle_error(err, null, callback);
