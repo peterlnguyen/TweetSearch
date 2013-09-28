@@ -1,4 +1,5 @@
-var rek = require("rekuire"); var logger = rek("logger").get_log(); 
+var rek = require("rekuire"); 
+var logger = rek("logger").get_log(); 
 var twitterModel = rek("twitterModel");
 var elasticModel = rek("elasticModel");
 var twitterController = rek("twitterController");
@@ -16,6 +17,7 @@ var mainController = exports = module.exports = {
 
   // FIXME: redirect to correct views and pass in correct search terms
   search_tweets: function(req, res) {
+    var screen_name = req.body.screen_name
     logger.info("Attempting to search tweets.");
 
     var searchkey = {
@@ -35,19 +37,15 @@ var mainController = exports = module.exports = {
 
   // helper function
   handle_error: function(error, result, callback) {
-    if(!error) {
-      // do nothing
-    } else {
-      console.log("error: ", error.twitterReply);
-      twitter_error = error.twitterReply.errors[0].code;
-      console.log("twitter_error: ", twitter_error);
-      if(twitter_error && twitter_error == 34) {
-        // do nothing
-      }
-      else if(error != "{}") {
-        logger.error("Error in twitter.get_user_timeline: " + JSON.stringify(error));
-        callback(error, result);
-      }
+    // FIXME: unhandled: no error, no result
+    if(error) {
+      logger.error("Error in twitter.get_user_timeline: " + JSON.stringify(error));
+      logger.error("Result: " + JSON.stringify(result));
+      callback(error, result);
+    } else if(result && result.length <= 0) {
+      // non-existent screen name or no tweets foudn from twitter
+      logger.error("Error in twitter.get_user_timeline (falsy result): " + JSON.stringify(error));
+      callback(error, result);
     }
   },
 
@@ -59,9 +57,7 @@ var mainController = exports = module.exports = {
       mainController.handle_error(error, result, function() {
         res.render('index', { title: 'Error' });
       });
-      //if(error && error != "{}") res.render('index', { title: 'Error' });
       res.render('index', { title: JSON.stringify(result) });
-      //res.render('index', { title: JSON.stringify(result) });
     });
   },
 
@@ -76,22 +72,25 @@ var mainController = exports = module.exports = {
         twitterController.get_user_timeline(screen_name, function(err, res) {
           mainController.handle_error(err, res, callback);
 
-          mainController.index_tweet_bulk(res, function(err, res) {
-            mainController.handle_error(err, res, callback);
+          // if screen_name doesn't exist or has zero results, end processing
+          if(res && res.length > 0) {
+            mainController.index_tweet_bulk(res, function(err, res) {
+              mainController.handle_error(err, res, callback);
 
-            // give elasticsearch time to store events
-            setTimeout(function() {
-              elasticModel.get_user_tweets(screen_name, function(err, result, res) {
-                mainController.handle_error(err, result, callback);
+              // give elasticsearch time to store events
+              setTimeout(function() {
+                elasticModel.get_user_tweets(screen_name, function(err, result, res) {
+                  mainController.handle_error(err, result, callback);
 
-                callback(err, result);
-              });
-            }, 1500);
+                  callback(err, result);
+                });
+              }, 1500);
+            });
+          }
 
-          });
         });
 
-      // else fetch from elasticsearch
+      // screen_name index exists in elasticsearch, simply fetch from elasticsearch
       } else {
         callback(err, result);
       }

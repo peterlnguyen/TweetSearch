@@ -49,7 +49,7 @@ var elasticModel = exports = module.exports = {
         "index": "tweets",
         "type": keywords.screen_name,
         "fields": keywords.fields,
-        "size": 10
+        "size": 13
       },
       callback
     );
@@ -67,7 +67,7 @@ var elasticModel = exports = module.exports = {
         "index": "tweets",
         "type": screen_name,
         "fields": ["text", "screen_name"],
-        "size": 10,
+        "size": 13,
       },
       callback
     );
