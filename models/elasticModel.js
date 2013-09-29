@@ -33,11 +33,6 @@ var elasticModel = exports = module.exports = {
     client.bulk(wrapped_tweets, callback);
   },
 
-  // search by matching keywords found within tweet contents
-  search: function(keywords, callback) {
-    elasticModel._search(keywords, callback);
-  },
-
   _search: function(keywords, callback) {
     client.search(
       {
@@ -57,20 +52,29 @@ var elasticModel = exports = module.exports = {
 
 
   // get_user_tweets returns the initial, unfiltered list of a user's timeline
-  get_user_tweets: function(screen_name, callback) {
-    elasticModel._get_user_tweets(screen_name, callback);
+  get_user_tweets: function(screen_name, search_terms, callback) {
+    elasticModel._get_user_tweets(screen_name, search_terms, callback);
   },
 
-  _get_user_tweets: function(screen_name, callback) {
-    client.search(
+  _get_user_tweets: function(screen_name, search_terms, callback) {
+
+    var query = 
       {
         "index": "tweets",
         "type": screen_name,
         "fields": ["text", "screen_name"],
         "size": 13,
-      },
-      callback
-    );
+      };
+
+    if(search_terms && search_terms != undefined) {
+      console.log('reaches here');
+      console.log("search terms: ", search_terms)
+      query["query"] = { "match": { "text": search_terms } }
+    }
+
+    logger.info("query: ", query);
+
+    client.search(query, callback);
   },
 
   /* deletes all indices (when called with empty parameter) */

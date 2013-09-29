@@ -52,8 +52,10 @@ var mainController = exports = module.exports = {
   // FIXME: check for empty results (i.e. screen_name doesn't exist)
   // interface for view/routing method
   get_and_index_timeline: function(req, res) {
-    var screen_name = req.body.screen_name
-    mainController._get_and_index_timeline(screen_name, function(error, result) {
+    var screen_name = req.body.screen_name;
+    var search_terms = req.body.search_terms;
+
+    mainController._get_and_index_timeline(screen_name, search_terms, function(error, result) {
       mainController.handle_error(error, result, function() {
         res.render('index', { title: 'Error' });
       });
@@ -62,9 +64,9 @@ var mainController = exports = module.exports = {
   },
 
   // long and ugly function only used when someone searches for a new screen_name
-  _get_and_index_timeline: function(screen_name, callback) {
+  _get_and_index_timeline: function(screen_name, search_terms, callback) {
 
-    elasticModel.get_user_tweets(screen_name, function(err, result, res) {
+    elasticModel.get_user_tweets(screen_name, search_terms,  function(err, result, res) {
       mainController.handle_error(err, null, callback);
 
       // if new screen_name, GET tweet timeline from twitter and index to elasticsearch
@@ -79,7 +81,7 @@ var mainController = exports = module.exports = {
 
               // give elasticsearch time to store events
               setTimeout(function() {
-                elasticModel.get_user_tweets(screen_name, function(err, result, res) {
+                elasticModel.get_user_tweets(screen_name, search_terms, function(err, result, res) {
                   mainController.handle_error(err, result, callback);
 
                   callback(err, result);
