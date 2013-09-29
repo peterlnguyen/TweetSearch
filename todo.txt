@@ -1,13 +1,14 @@
 - possibly limit to the latest 200 tweets?  be sure to modularize to prepare for future extension.
   - or fetch first 200 and the continue fetching in the background? or with a cron job?
+
 - parse twitter json for invalid screen name
 - sanitize input
-- need to pass in fixed screen_names to all views that have text-search
+- need to modularize routing
+- need to parse and print useful error messages (handle doesn't exist, no results, etc)
 
 
 *** bottom two errors could be due to twitter api max limit
 - make clean destroys "tweet" index so that *nothing* exists, is especially apparent when you clean and then call get_and_index_timeline
   - somehow create a setup file
-- need to only destroy mattcutts in test_api
 - maybe helper class for mainController
 
