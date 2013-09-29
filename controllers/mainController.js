@@ -17,20 +17,19 @@ var mainController = exports = module.exports = {
 
   // FIXME: redirect to correct views and pass in correct search terms
   search_tweets: function(req, res) {
-    var screen_name = req.body.screen_name
-    logger.info("Attempting to search tweets.");
+    var screen_name = req.body.screen_name;
+    var search_terms = req.body.search_terms;
 
     var searchkey = {
-      screen_name: "davemcclure",
-      text: "Said",
+      screen_name: screen_name,
+      text: search_terms,
       fields: ["text", "screen_name"]
     };
 
     elasticModel.search(searchkey, function(error, result) {
       if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));
-      else {
-        logger.info("Res: " + JSON.stringify(result));
-      }
+      else logger.info("Res: " + JSON.stringify(result));
+
       res.render('index', { title: JSON.stringify(result) });
     });
   },
@@ -55,9 +54,9 @@ var mainController = exports = module.exports = {
     var screen_name = req.body.screen_name
     mainController._get_and_index_timeline(screen_name, function(error, result) {
       mainController.handle_error(error, result, function() {
-        res.render('index', { title: 'Error' });
+        res.render('text_search', { title: 'Error' });
       });
-      res.render('index', { title: JSON.stringify(result) });
+      res.render('text_search', { title: JSON.stringify(result) });
     });
   },
 

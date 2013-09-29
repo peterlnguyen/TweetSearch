@@ -1,6 +1,8 @@
 - possibly limit to the latest 200 tweets?  be sure to modularize to prepare for future extension.
   - or fetch first 200 and the continue fetching in the background? or with a cron job?
 - parse twitter json for invalid screen name
+- sanitize input
+- need to pass in fixed screen_names to all views that have text-search
 
 
 *** bottom two errors could be due to twitter api max limit
