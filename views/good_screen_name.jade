@@ -4,13 +4,12 @@ block content
   h1= title
   p Showing results for #{screen_name}
 
-
   form(method='post', action='search_tweets')
     span.form_input
       input(type='hidden', name='screen_name', id='screen_name', value='#{screen_name}')
 
     span.form_label
-      label(for='search_terms') Search Terms: 
+      label(for='screenname') Search Terms: 
     span.form_input
       input(type='text', name='search_terms', id='search_terms', placeholder='hello world')
     

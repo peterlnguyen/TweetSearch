@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+  p Twitter handle #{screen_name} doesn't appear to exist!
+
+  form(method='post', action='get_tweets')
+    span.form_label
+      label(for='screenname') Twitter Handle: 
+    span.form_input
+      input(type='text', name='screen_name', id='screen_name', placeholder='stephenathome')
+    
+    span
+      input(type='submit', id='submit', value='Submit')

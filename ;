@@ -24,9 +24,9 @@ var mainController = exports = module.exports = {
 
     var searchkey = {
       screen_name: screen_name,
-      text: search_terms,
       fields: ["text", "screen_name"]
     };
+    if(search_terms) searchKey["text"] = search_terms
 
     elasticModel.search(searchkey, function(error, result) {
       if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));

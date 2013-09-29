@@ -39,20 +39,15 @@ var elasticModel = exports = module.exports = {
   },
 
   _search: function(keywords, callback) {
-    client.search(
+    var query =
       {
-        "query": {
-          "match": {
-            "text": keywords.text 
-          },
-        },
         "index": "tweets",
         "type": keywords.screen_name,
         "fields": keywords.fields,
         "size": 13
-      },
-      callback
-    );
+      };
+    if(keywords.text) query["query"] = { "match": { "text": keywords.text } };
+    client.search(query , callback);
   },
 
 
