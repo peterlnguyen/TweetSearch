@@ -1,5 +1,4 @@
-- possibly limit to the latest 200 tweets?  be sure to modularize to prepare for future extension.
-  - or fetch first 200 and the continue fetching in the background? or with a cron job?
+- fetch first 200 and the continue fetching in the background? or with a cron job?
 
 - sanitize input
 - need to modularize routing
@@ -7,10 +6,5 @@
 - set match tweet limits to 200
 - classes and inheritance to remove all of the referencing "var logger = ..." clutter in tests, especially, but also in controller and other classes.
 
-
-
-*** bottom two errors could be due to twitter api max limit
-- make clean destroys "tweet" index so that *nothing* exists, is especially apparent when you clean and then call get_and_index_timeline
-  - somehow create a setup file
 - maybe helper class for mainController
 

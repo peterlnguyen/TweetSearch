@@ -1,7 +1,7 @@
 
 //var elasticExtractor = exports = module.exports = {
   // small, and seemingly unnecessary, but abstraction in case data format changes
-  exports = module.exports = function extract(json) {
+  module.exports.extract = function extract(json) {
     content = json.hits;
     tweets = [];
     var len = content.length;
