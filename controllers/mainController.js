@@ -19,16 +19,17 @@ var mainController = exports = module.exports = {
   search_tweets: function(req, res) {
     var screen_name = req.body.screen_name;
     var search_terms = req.body.search_terms;
-      logger.info("screen name: ", screen_name);
-      logger.info("search terms ", search_terms);
+    logger.info("screen name: ", screen_name);
+    logger.info("search terms ", search_terms);
 
     var searchkey = {
       screen_name: screen_name,
       text: search_terms,
-      fields: ["text", "screen_name"]
+      fields: ["text", "screen_name", "created_at"]
     };
 
     elasticModel.search(searchkey, function(error, result) {
+      // could be an acceptable empty object, resulting from db miss from new, legitimate twitter handle
       if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));
       else logger.info("Res: " + JSON.stringify(result));
       res.render('text_search', { title: JSON.stringify(result), screen_name: screen_name });

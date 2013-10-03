@@ -5,6 +5,7 @@
 - sanitize input
 - need to modularize routing
 - need to parse and print useful error messages (handle doesn't exist, no results, etc)
+- set match tweet limits to 200
 
 
 *** bottom two errors could be due to twitter api max limit

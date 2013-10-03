@@ -61,7 +61,7 @@ var elasticModel = exports = module.exports = {
       {
         "index": "tweets",
         "type": screen_name,
-        "fields": ["text", "screen_name"],
+        "fields": ["text", "screen_name", "created_at"],
         "size": 13,
       },
       callback
