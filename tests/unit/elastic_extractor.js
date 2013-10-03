@@ -2,7 +2,8 @@ var assert = require("assert");
 var should = require("should");
 var rek = require("rekuire");
 var logger = rek("logger").get_log();
-var extractor = rek("elasticExtractor");
+
+var extract = rek("elasticExtractor");
 
 describe("elasticsearch json extractor", function() {
 
@@ -15,9 +16,7 @@ describe("elasticsearch json extractor", function() {
           "fields":{"created_at":"Thu Sep 26 13:15:09 +0000 2013","text":"Anybody seen my pancake mix? Couldn't find it in the cabinet so I figured I'd ask you guys.","screen_name":"stephenathome"}
         }]}
 
-      tweets = extractor.extract(json);
-
-      console.log(tweets);
+      tweets = extract(json);
 
       tweets[0].text.should.be.ok;
       tweets[0].created_at.should.be.ok;
