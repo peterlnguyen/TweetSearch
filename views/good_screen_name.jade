@@ -5,19 +5,11 @@ block content
   p Showing results for #{screen_name}
 
   div#chart
-  - var arr = JSON.parse(tweets).hits
 
-  script
-    $(document).ready(function() {
-      console.log("hello world")
-
-      $("#chart").append("<ul></ul>");
-      for(var i in arr) {
-        var li = "<li>";
-        $("ul").append(li.concat(arr[i]))
-      }
-
-    });
+  if tweets
+    ul
+    for t in tweets.hits
+      li #{JSON.stringify(t)}
 
 
   form(method='post', action='search_tweets')
