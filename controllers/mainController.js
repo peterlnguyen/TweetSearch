@@ -32,7 +32,7 @@ var mainController = exports = module.exports = {
       // could be an acceptable empty object, resulting from db miss from new, legitimate twitter handle
       if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));
       else logger.info("Res: " + JSON.stringify(result));
-      res.render('text_search', { title: JSON.stringify(result), screen_name: screen_name });
+      res.render('text_search', {title: "Results", tweets: result.hits, screen_name: screen_name });
     });
   },
 
@@ -58,7 +58,7 @@ var mainController = exports = module.exports = {
       mainController.handle_error(error, result, function() {
         res.render('bad_screen_name', { title: 'Error', screen_name: screen_name });
       });
-      res.render('good_screen_name', { title: JSON.stringify(result), screen_name: screen_name });
+      res.render('good_screen_name', { title: "Results", tweets: result.hits, screen_name: screen_name });
     });
   },
 
