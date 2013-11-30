@@ -58,7 +58,7 @@ var mainController = exports = module.exports = {
       mainController.handle_error(error, result, function() {
         res.render('bad_screen_name', { title: 'Error', screen_name: screen_name });
       });
-      res.render('good_screen_name', { title: "Results", tweets: result.hits, screen_name: screen_name });
+      if(result) res.render('good_screen_name', { title: "Results", tweets: result.hits, screen_name: screen_name });
     });
   },
 

@@ -1,15 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 Tweet Search
 
+  table.table
+    div
+      tr.floatleft
+        td
+          form(id='get_tweets', method='post', action='get_tweets')
+            span.form_label
+              label(for='screenname') Search a Twitter user:
+            span
+              input(class="button", type='text', name='screen_name', id='screen_name', placeholder='stephenathome')
+        td
+          div.offsetbtn
+            button(onclick='document.getElementById("get_tweets").submit()', class="btn btn-default", type='submit', id='submit', value='Submit') Submit
 
-  form(method='post', action='get_tweets')
-    span.form_label
-      label(for='screenname') Twitter Handle: 
-    span.form_input
-      input(type='text', name='screen_name', id='screen_name', placeholder='stephenathome')
-    
-    span
-      input(type='submit', id='submit', value='Submit')
