@@ -1,37 +1,34 @@
 extends layout
 
 block content
-  h1= title
-  p Showing results for #{screen_name}
+  h1
+    p Showing results for #{screen_name}
 
-  div#chart
+  div
+    form(method='post', action='search_tweets')
+      span.form_input
+        input(type='hidden', name='screen_name', id='screen_name', value='#{screen_name}')
+
+      span.form_label
+        label(for='screenname') Filter #{screen_name}'s Tweets: 
+      span.form_input
+        input(type='text', name='search_terms', id='search_terms', placeholder='hello world')
+      span.button
+        input(type='submit', id='submit', value='Submit')
+
+    form(method='post', action='get_tweets')
+      span.form_label
+        label(for='screenname') New Twitter User Search: 
+      span
+        input(class="button", type='text', name='screen_name', id='screen_name', placeholder='stephenathome')
+      span
+        input(class="button", type='submit', id='submit', value='Submit')
+
 
   if tweets
-    ul
-    for t in tweets
-      li #{JSON.stringify(t)}
-
-
-  form(method='post', action='search_tweets')
-    span.form_input
-      input(type='hidden', name='screen_name', id='screen_name', value='#{screen_name}')
-
-    span.form_label
-      label(for='screenname') Search Terms: 
-    span.form_input
-      input(type='text', name='search_terms', id='search_terms', placeholder='hello world')
-    
-    span
-      input(type='submit', id='submit', value='Submit')
-
-  form(method='post', action='get_tweets')
-    span.form_label
-      label(for='screenname') New Twitter Handle Search: 
-    span.form_input
-      input(type='text', name='screen_name', id='screen_name', placeholder='stephenathome')
-    
-    span
-      input(type='submit', id='submit', value='Submit')
-
-  div#chart
-
+    ul.list-group
+      for t in tweets
+        div.well
+          div.list-group-item 
+            p "#{t.fields.text}"
+            p -#{t.fields.created_at}

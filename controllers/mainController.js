@@ -32,7 +32,7 @@ var mainController = exports = module.exports = {
       // could be an acceptable empty object, resulting from db miss from new, legitimate twitter handle
       if(error && error != "{}") logger.info("Err: " + JSON.stringify(error));
       else logger.info("Res: " + JSON.stringify(result));
-      res.render('text_search', {title: "Results", tweets: result.hits, screen_name: screen_name });
+      res.render('good_screen_name', {title: "Results", tweets: result.hits, screen_name: screen_name });
     });
   },
 
