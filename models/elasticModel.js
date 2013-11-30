@@ -44,7 +44,7 @@ var elasticModel = exports = module.exports = {
         "index": "tweets",
         "type": keywords.screen_name,
         "fields": keywords.fields,
-        "size": 13
+        "size": 200
       };
     if(keywords.text) query["query"] = { "match": { "text": keywords.text } };
     client.search(query , callback);
@@ -62,7 +62,7 @@ var elasticModel = exports = module.exports = {
         "index": "tweets",
         "type": screen_name,
         "fields": ["text", "screen_name", "created_at"],
-        "size": 13,
+        "size": 200,
       },
       callback
     );

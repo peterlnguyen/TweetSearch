@@ -16,7 +16,7 @@ var twitterModel = exports = module.exports = {
     twitClient.get("statuses/user_timeline", 
     { 
       "screen_name": screen_name,
-      "count": 20,
+      "count": 200,
       "include_rts": 1,
     },
     callback);
