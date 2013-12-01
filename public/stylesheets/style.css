@@ -1,7 +1,13 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: black;
+  background-image: url("../images/use_your_illusion.png"); 
+  color: white;
+}
+
+.well {
+  color: black;
+  background-color: white;
 }
 
 a {
